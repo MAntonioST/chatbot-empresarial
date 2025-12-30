@@ -5,7 +5,6 @@ import com.techcorp.chatbot.dto.ChatResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.model.ChatResponse as AiChatResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -42,14 +41,15 @@ public class ChatbotService {
             
             ChatClient chatClient = chatClientBuilder.build();
             
-            AiChatResponse aiResponse = chatClient.prompt()
+            // Usar nome completo da classe para evitar conflito
+            org.springframework.ai.chat.model.ChatResponse aiResponse = chatClient.prompt()
                     .system(SYSTEM_PROMPT)
                     .user(request.message())
                     .call()
                     .chatResponse();
             
             String responseText = aiResponse.getResult().getOutput().getContent();
-            Integer tokensUsed = aiResponse.getMetadata().getUsage().getTotalTokens();
+            Integer tokensUsed = Math.toIntExact(aiResponse.getMetadata().getUsage().getTotalTokens());
             
             log.info("Resposta gerada. Tokens usados: {}", tokensUsed);
             
