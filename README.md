@@ -281,13 +281,6 @@ export $(cat .env | xargs)
 ./mvnw spring-boot:run
 ```
 
-**Ou use o script helper:**
-
-```bash
-chmod +x start.sh
-./start.sh
-```
-
 ### Aguardar Inicialização
 
 Procure no log:
@@ -395,64 +388,6 @@ curl -X POST http://localhost:8090/api/v1/chat   -H "Content-Type: application/j
 # Teste 3: Pergunta técnica
 curl -X POST http://localhost:8090/api/v1/chat   -H "Content-Type: application/json"   -d '{"message": "Explique microserviços"}'
 ```
-
----
-
-## 📦 Deploy
-
-### Gerar JAR
-
-```bash
-./mvnw clean package -DskipTests
-```
-
-O JAR será gerado em: `target/chatbot-empresarial-0.0.1-SNAPSHOT.jar`
-
-### Executar JAR
-
-```bash
-export GROQ_API_KEY=gsk_sua_chave_aqui
-java -jar target/chatbot-empresarial-0.0.1-SNAPSHOT.jar
-```
-
-### Docker
-
-Criar `Dockerfile`:
-
-```dockerfile
-FROM eclipse-temurin:21-jre-alpine
-
-WORKDIR /app
-
-COPY target/*.jar app.jar
-
-EXPOSE 8090
-
-ENV GROQ_API_KEY=""
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
-```
-
-Build e run:
-
-```bash
-# Build
-docker build -t chatbot-empresarial .
-
-# Run
-docker run -p 8090:8090   -e GROQ_API_KEY=gsk_sua_chave_aqui   chatbot-empresarial
-```
-
----
-
-## 📊 Performance
-
-| **Métrica** | **Valor** |
-|-------------|-----------|
-| Latência média | ~500ms |
-| Tokens/segundo | ~100 |
-| Limite (Groq free) | 30 req/min |
-| Custo | $0.00 |
 
 ---
 
